@@ -79,9 +79,9 @@ macro_rules! groth16_prove_bench {
         }
 
         println!(
-            "per-constraint proving time for {}: {} ns/constraint",
+            "proving time for {}: {} ns",
             stringify!($bench_pairing_engine),
-            start.elapsed().as_nanos() / 10 as u128 / 65536u128
+            start.elapsed().as_nanos() / 10 as u128
         );
     };
 }
