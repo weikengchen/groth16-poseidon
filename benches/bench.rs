@@ -79,9 +79,9 @@ macro_rules! groth16_prove_bench {
         }
 
         println!(
-            "proving time for {}: {} ns",
+            "proving time for {}: {} s",
             stringify!($bench_pairing_engine),
-            start.elapsed().as_secs_f64() / 10 as u128
+            start.elapsed().as_secs_f64() / 10
         );
     };
 }
