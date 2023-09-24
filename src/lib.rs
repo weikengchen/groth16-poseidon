@@ -38,9 +38,6 @@ pub mod verifier;
 #[cfg(feature = "r1cs")]
 pub mod constraints;
 
-#[cfg(test)]
-mod test;
-
 pub use self::data_structures::*;
 pub use self::{generator::*, prover::*, verifier::*};
 
