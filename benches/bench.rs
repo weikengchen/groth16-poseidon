@@ -2,17 +2,17 @@
 //     RAYON_NUM_THREADS=N cargo bench --no-default-features --features "std parallel" -- --nocapture
 // where N is the number of threads you want to use (N = 1 for single-thread).
 
-use ark_std::marker::PhantomData;
 use ark_bn254::{Bn254, Fr as BnFr};
 use ark_crypto_primitives::snark::SNARK;
 use ark_crypto_primitives::sponge::constraints::CryptographicSpongeVar;
+use ark_crypto_primitives::sponge::poseidon::constraints::PoseidonSpongeVar;
+use ark_crypto_primitives::sponge::poseidon::{find_poseidon_ark_and_mds, PoseidonConfig};
 use ark_ff::PrimeField;
 use ark_groth16::Groth16;
-use ark_relations::r1cs::{ConstraintSynthesizer, ConstraintSystemRef, SynthesisError};
-use ark_crypto_primitives::sponge::poseidon::{find_poseidon_ark_and_mds, PoseidonConfig};
-use ark_crypto_primitives::sponge::poseidon::constraints::PoseidonSpongeVar;
 use ark_r1cs_std::fields::fp::FpVar;
 use ark_r1cs_std::prelude::AllocVar;
+use ark_relations::r1cs::{ConstraintSynthesizer, ConstraintSystemRef, SynthesisError};
+use ark_std::marker::PhantomData;
 
 #[derive(Copy)]
 struct DummyCircuit<F: PrimeField> {
@@ -29,13 +29,8 @@ impl<F: PrimeField> Clone for DummyCircuit<F> {
 
 impl<F: PrimeField> ConstraintSynthesizer<F> for DummyCircuit<F> {
     fn generate_constraints(self, cs: ConstraintSystemRef<F>) -> Result<(), SynthesisError> {
-        let (ark, mds) = find_poseidon_ark_and_mds::<F>(
-            F::MODULUS_BIT_SIZE as u64,
-            2,
-            8u64,
-            31u64,
-            0u64,
-        );
+        let (ark, mds) =
+            find_poseidon_ark_and_mds::<F>(F::MODULUS_BIT_SIZE as u64, 2, 8u64, 31u64, 0u64);
 
         let sponge_params = PoseidonConfig {
             full_rounds: 8usize,
@@ -71,7 +66,7 @@ macro_rules! groth16_prove_bench {
     ($bench_name:ident, $bench_field:ty, $bench_pairing_engine:ty) => {
         let rng = &mut ark_std::rand::rngs::StdRng::seed_from_u64(0u64);
         let c = DummyCircuit::<$bench_field> {
-            f_phantom: PhantomData
+            f_phantom: PhantomData,
         };
 
         let (pk, _) = Groth16::<$bench_pairing_engine>::circuit_specific_setup(c, rng).unwrap();
