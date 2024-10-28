@@ -22,7 +22,7 @@ ark-poly = { version = "0.4.0", default-features = false }
 ark-std = { version = "0.4.0", default-features = false }
 ark-relations = { version = "0.4.0", default-features = false }
 ark-crypto-primitives = { version = "0.4.0", default-features = false, features = ["snark", "r1cs", "sponge"] }
-ark-r1cs-std = { version = "0.4.0", default-features = false, optional = true }
+ark-r1cs-std = { version = "0.5.0", default-features = false, optional = true }
 
 tracing = { version = "0.1", default-features = false, features = [ "attributes" ], optional = true }
 derivative = { version = "2.0", features = ["use_core"], optional = true}
@@ -32,7 +32,7 @@ rayon = { version = "1", optional = true }
 [dev-dependencies]
 csv = { version = "1" }
 ark-bn254 = { version = "0.4.0", default-features = false, features = ["curve"] }
-ark-r1cs-std = { version = "0.4.0", default-features = false }
+ark-r1cs-std = { version = "0.5.0", default-features = false }
 
 [features]
 default = ["parallel"]
